@@ -9,9 +9,13 @@
 <body>
     <div class="container">
         <h1>Generate a <br><span>Random Password</span></h1>
+        <div class="len">
+            <p>Password length:</p>
+            <input type="number" id="lent" min="1" max="32" placeholder="Default: 12">
+        </div>
         <div class="display">
             <input type="text" id="password" placeholder="Password">
-            <img src="images/copy.png" alt="Image of copy button">
+            <img src="images/copy.png" alt="Image of copy button" onclick="copyPassword()">
         </div>
         <button onclick="createPassword()"><img src="images/generate.png" alt="Generate password button">Generate Password</button>
 
@@ -19,28 +23,39 @@
 
     <script>
         const passwordBox = document.getElementById("password");
-        const length = 12;
+        const rawLength = document.getElementById("lent");
 
         const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         const lowerCase = "abcdefghijklmnopqrstuvwxyz";
         const number = "0123456789";
-        const symbols = "!@#$%^&*()_+=-<>?,./;[]{}~";
+        const symbol = "!@#$%^&*()_+=-<>?,./;[]{}~";
 
-        const allChars = upperCase + lowerCase + number + symbols;
+        const allChars = upperCase + lowerCase + number + symbol;
 
         function createPassword(){
-            let password = "";
-            password += upperCase[Math.floor(Math.random() * upperCase.length)];
-            password += lowerCase[Math.floor(Math.random() * lowerCase.length)];
-            password += number[Math.floor(Math.random() * number.length)];
-            password += symbols[Math.floor(Math.random() * symbols.length)];
+            let length = parseInt(rawLength.value) || 12;
+            if (length > 32) {
+                length = 32;
+                alert("Password length can't be more than 32 characters, so it's set to 32.");
+            }
+            else if (length < 1) {
+                length = 1;
+                alert("Password length can't be less than 1 character, so it's set to 1.");
+            }
 
-            while(length > password.length()) {
+            console.log(length);
+            let password = "";
+
+            while(length > password.length) {
                 password += allChars[Math.floor(Math.random() * allChars.length)];
             }
             passwordBox.value = password;
         }   
 
+        function copyPassword(){
+            passwordBox.select();
+            document.execCommand("copy");
+        }
         
     </script>
 </body>
